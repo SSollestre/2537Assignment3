@@ -42,6 +42,22 @@ const updateHeader = (currentAmount, maxAmount, totalPokemon) => {
 }
 
 
+const updateFilter = (allFilters) => {
+    $('#filterContainer').empty();
+
+    allFilters.forEach((typeObject) => {
+        let type = typeObject.name;
+        $('#filterContainer').append(`
+        <div class="filterDisplay">
+            <input id="${type}" class="typeFilter" type="checkbox" name="${type}" value="${type}">
+            <label for="${type}">${type}</label>
+        </div>
+        `);
+        console.log(type)
+    })
+}
+
+
 const paginate = async (currentPage, allPokemon) => {
     let pagePokemon = allPokemon.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
     let totalPokemonOnPage = pagePokemon.length
@@ -74,6 +90,10 @@ const setup = async () => {
     let allPokemon = allPokemonResponse.data.results
     const numPages = Math.ceil(allPokemon.length / PAGE_SIZE)
 
+    let allFiltersResponse = await axios.get('https://pokeapi.co/api/v2/type/')
+    let allFilters = allFiltersResponse.data.results
+
+    updateFilter(allFilters)
     paginate(INITIAL_PAGE, allPokemon)
     updatePaginationButtons(INITIAL_PAGE, numPages)
 
