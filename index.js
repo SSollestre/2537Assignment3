@@ -53,7 +53,6 @@ const updateFilter = (allFilters) => {
             <label for="${type}">${type}</label>
         </div>
         `);
-        console.log(type)
     })
 }
 
@@ -92,6 +91,7 @@ const setup = async () => {
 
     let allFiltersResponse = await axios.get('https://pokeapi.co/api/v2/type/')
     let allFilters = allFiltersResponse.data.results
+    let selectedFilters = [];
 
     updateFilter(allFilters)
     paginate(INITIAL_PAGE, allPokemon)
@@ -103,6 +103,20 @@ const setup = async () => {
         paginate(currentPage, allPokemon)
         updatePaginationButtons(currentPage, numPages)
     })
+
+    // Filter event listener
+    $('body').on('change', '.typeFilter', function (event) {
+        let filter = event.target.value
+        if ($(this).is(':checked')) {
+            selectedFilters.push(filter)
+        } else {
+            selectedFilters = selectedFilters.filter((element) => {
+                return element !== filter
+            })
+        }
+
+        console.log(selectedFilters)
+    });
 
 }
 
