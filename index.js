@@ -84,6 +84,75 @@ const paginate = async (currentPage, allPokemon) => {
 }
 
 
+const getPokemonFiltered = async (filters) => {
+    const firstFilter = filters[0]
+    const initialSetResponse = await axios.get(`https://pokeapi.co/api/v2/type/${firstFilter}/`)
+    let initialSet = initialSetResponse.data.pokemon
+    initialSet = initialSet.map((pokemonObject) => {
+        return pokemonObject.pokemon
+    })
+
+    let pokemonPromises = initialSet.map(async (pokemonObject) => {
+        return await axios.get(pokemonObject.url)
+    })
+
+    let pokemonPromisesResolved = await Promise.all(pokemonPromises)
+    let pokemonArray = pokemonPromisesResolved.map((res) => {
+        return res.data
+    })
+
+    let initialSetTypes = pokemonArray.map((pokemonObject) => {
+        return pokemonObject.types
+    })
+
+    let initialSetTypesNames = initialSetTypes.map((typeArray) => {
+        let typeArrayNames = typeArray.map((typeObject) => {
+            return typeObject.type.name
+        })
+        return typeArrayNames
+    })
+
+    console.log("Initial Set")
+    console.log(initialSet)
+    console.log("Pokemon")
+    console.log(pokemonArray)
+    console.log("Types")
+    console.log(initialSetTypes)
+    console.log("Types names only")
+    console.log(initialSetTypesNames)
+
+    let initialSetComplete = []
+
+    for (let i = 0; i < initialSet.length; i++) {
+        initialSetComplete.push({
+            name: initialSet[i].name,
+            type: initialSetTypesNames[i]
+        })
+    }
+
+    console.log("Completed set")
+    console.log(initialSetComplete)
+
+    return initialSet
+}
+
+
+const displayFilteredPokemon = async (filters, allPokemon, numPages) => {
+    let filteredPokemon;
+    let test;
+    if (filters.length === 0) {
+        paginate(INITIAL_PAGE, allPokemon)
+        updatePaginationButtons(INITIAL_PAGE, numPages)
+    } else {
+        console.log("All Pokemon Format")
+        console.log(allPokemon)
+        filteredPokemon = await getPokemonFiltered(filters)
+        paginate(INITIAL_PAGE, filteredPokemon)
+        updatePaginationButtons(INITIAL_PAGE, numPages)
+    }
+}
+
+
 const setup = async () => {
     let allPokemonResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810')
     let allPokemon = allPokemonResponse.data.results
@@ -116,6 +185,7 @@ const setup = async () => {
         }
 
         console.log(selectedFilters)
+        displayFilteredPokemon(selectedFilters, allPokemon, numPages)
     });
 
 }
