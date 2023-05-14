@@ -172,6 +172,38 @@ const displayFilteredPokemon = async (filters, allPokemon, numPages) => {
 }
 
 
+const updateModal = (pokemonObject) => {
+    const name = pokemonObject.species.name
+    const id = pokemonObject.id
+    const imageSrc = pokemonObject.sprites.other.official - artwork.front_default
+    let abilities = pokemonObject.abilities
+    let stats = pokemonObject.stats
+    let types = pokemonObject.types
+
+    abilities = abilities.map((abilityObject) => {
+        return abilityObject.ability.name
+    })
+
+    stats = stats.map((statObject) => {
+        return {
+            name: statObject.stat.name,
+            value: statObject.base_stat
+        }
+    })
+
+    types = types.map((typeObject) => {
+        return typeObject.type.name
+    })
+
+    console.log(pokemonObject)
+    // console.log(name)
+    // console.log(abilities)
+    // console.log(stats)
+    // console.log(types)
+
+}
+
+
 const setup = async () => {
     let allPokemonResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810')
     let allPokemon = allPokemonResponse.data.results
@@ -192,7 +224,7 @@ const setup = async () => {
         updatePaginationButtons(currentPage, numPages)
     })
 
-    // Filter event listener
+    // Event listener on filter
     $('body').on('change', '.typeFilter', function (event) {
         let filter = event.target.value
         if ($(this).is(':checked')) {
@@ -203,8 +235,17 @@ const setup = async () => {
             })
         }
 
-        console.log(selectedFilters)
+        // console.log(selectedFilters)
         displayFilteredPokemon(selectedFilters, allPokemon, numPages)
+    });
+
+    // Event listener on pokemon card
+    $('body').on('click', '.pokeCard', async function (event) {
+        const pokemonName = $(this).attr('pokeName')
+        const pokemonResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+        const pokemonObject = pokemonResponse.data
+        updateModal(pokemonObject)
+
     });
 
 }
