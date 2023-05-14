@@ -137,7 +137,7 @@ const getPokemonFiltered = async (filters) => {
 }
 
 
-const displayFilteredPokemon = async (filters, allPokemon, numPages) => {
+const displayFilteredPokemon = async (filters, allPokemon) => {
     let filteredPokemon;
     if (filters.length === 0) {
         filteredPokemon = allPokemon
@@ -145,7 +145,6 @@ const displayFilteredPokemon = async (filters, allPokemon, numPages) => {
         filteredPokemon = await getPokemonFiltered(filters)
     }
     paginate(INITIAL_PAGE, filteredPokemon)
-    updatePaginationButtons(INITIAL_PAGE, numPages)
     return filteredPokemon
 }
 
@@ -259,8 +258,10 @@ const setup = async () => {
             })
         }
 
-        allPokemon = await displayFilteredPokemon(selectedFilters, allPokemon, numPages)
+        allPokemon = await displayFilteredPokemon(selectedFilters, allPokemon)
         numPages = Math.ceil(allPokemon.length / PAGE_SIZE)
+        currentPage = INITIAL_PAGE;
+        updatePaginationButtons(currentPage, numPages)
     });
 
     // Event listener on pokemon card
