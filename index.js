@@ -112,15 +112,6 @@ const getPokemonFiltered = async (filters) => {
         return typeArrayNames
     })
 
-    // console.log("Initial Set")
-    // console.log(initialSet)
-    // console.log("Pokemon")
-    // console.log(pokemonArray)
-    // console.log("Types")
-    // console.log(initialSetTypes)
-    // console.log("Types names only")
-    // console.log(initialSetTypesNames)
-
     let initialSetComplete = []
 
     for (let i = 0; i < initialSet.length; i++) {
@@ -130,28 +121,17 @@ const getPokemonFiltered = async (filters) => {
         })
     }
 
-    // console.log("Completed set")
-    // console.log(initialSetComplete)
-    // console.log(initialSetComplete[0].type)
-
     let multiFilter = initialSetComplete
 
     for (let i = 1; i < filters.length; i++) {
-        console.log(i)
         multiFilter = initialSetComplete.filter((pokemon) => {
             return pokemon.type.includes(filters[i])
         })
     }
 
-    console.log("Multi filter")
-    console.log(multiFilter)
-
     multiFilter = multiFilter.map((typedPokemon) => {
         return typedPokemon.name
     })
-
-    console.log("Multi filter parsed")
-    console.log(multiFilter)
 
     return multiFilter
 }
@@ -163,8 +143,6 @@ const displayFilteredPokemon = async (filters, allPokemon, numPages) => {
         paginate(INITIAL_PAGE, allPokemon)
         updatePaginationButtons(INITIAL_PAGE, numPages)
     } else {
-        console.log("All Pokemon Format")
-        console.log(allPokemon)
         filteredPokemon = await getPokemonFiltered(filters)
         paginate(INITIAL_PAGE, filteredPokemon)
         updatePaginationButtons(INITIAL_PAGE, numPages)
@@ -194,12 +172,6 @@ const updateModal = (pokemonObject) => {
     types = types.map((typeObject) => {
         return typeObject.type.name
     })
-
-    console.log(pokemonObject)
-    // console.log(name)
-    // console.log(abilities)
-    // console.log(stats)
-    // console.log(types)
 
     $('#pokeModal').html(`
     <div class="modal-dialog" role="document">
@@ -287,7 +259,6 @@ const setup = async () => {
             })
         }
 
-        // console.log(selectedFilters)
         displayFilteredPokemon(selectedFilters, allPokemon, numPages)
     });
 
