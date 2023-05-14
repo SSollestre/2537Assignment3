@@ -77,6 +77,7 @@ const setup = async () => {
     paginate(INITIAL_PAGE, allPokemon)
     updatePaginationButtons(INITIAL_PAGE, numPages)
 
+    // Event listener on pagination buttons
     $('body').on('click', '.numberedButtons', async function (event) {
         let currentPage = Number(event.target.value)
         paginate(currentPage, allPokemon)
