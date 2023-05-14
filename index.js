@@ -59,7 +59,7 @@ const updateFilter = (allFilters) => {
 
 const paginate = async (currentPage, allPokemon) => {
     let pagePokemon = allPokemon.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-    let totalPokemonOnPage = pagePokemon.length
+    let totalPokemonOnPage = pagePokemon.length - 1
     let firstPokemonCount = (currentPage - 1) * PAGE_SIZE + 1
 
     $('#pokeCardContainer').empty();
@@ -112,34 +112,53 @@ const getPokemonFiltered = async (filters) => {
         return typeArrayNames
     })
 
-    console.log("Initial Set")
-    console.log(initialSet)
-    console.log("Pokemon")
-    console.log(pokemonArray)
-    console.log("Types")
-    console.log(initialSetTypes)
-    console.log("Types names only")
-    console.log(initialSetTypesNames)
+    // console.log("Initial Set")
+    // console.log(initialSet)
+    // console.log("Pokemon")
+    // console.log(pokemonArray)
+    // console.log("Types")
+    // console.log(initialSetTypes)
+    // console.log("Types names only")
+    // console.log(initialSetTypesNames)
 
     let initialSetComplete = []
 
     for (let i = 0; i < initialSet.length; i++) {
         initialSetComplete.push({
-            name: initialSet[i].name,
+            name: initialSet[i],
             type: initialSetTypesNames[i]
         })
     }
 
-    console.log("Completed set")
-    console.log(initialSetComplete)
+    // console.log("Completed set")
+    // console.log(initialSetComplete)
+    // console.log(initialSetComplete[0].type)
 
-    return initialSet
+    let multiFilter = initialSetComplete
+
+    for (let i = 1; i < filters.length; i++) {
+        console.log(i)
+        multiFilter = initialSetComplete.filter((pokemon) => {
+            return pokemon.type.includes(filters[i])
+        })
+    }
+
+    console.log("Multi filter")
+    console.log(multiFilter)
+
+    multiFilter = multiFilter.map((typedPokemon) => {
+        return typedPokemon.name
+    })
+
+    console.log("Multi filter parsed")
+    console.log(multiFilter)
+
+    return multiFilter
 }
 
 
 const displayFilteredPokemon = async (filters, allPokemon, numPages) => {
     let filteredPokemon;
-    let test;
     if (filters.length === 0) {
         paginate(INITIAL_PAGE, allPokemon)
         updatePaginationButtons(INITIAL_PAGE, numPages)
