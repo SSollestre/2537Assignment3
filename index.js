@@ -1,11 +1,8 @@
 const PAGE_SIZE = 10
-let currentPage = 1
+const INITIAL_PAGE = 1
 
 
-const setup = async () => {
-    let allPokemonResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810')
-    let allPokemon = allPokemonResponse.data.results
-
+const paginate = async (currentPage, allPokemon) => {
     let pagePokemon = allPokemon.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
     pagePokemon.forEach(async (pokemonObject) => {
@@ -22,6 +19,22 @@ const setup = async () => {
         </div>
     `);
     })
+
+}
+
+
+const setup = async () => {
+    let allPokemonResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810')
+    let allPokemon = allPokemonResponse.data.results
+
+    paginate(INITIAL_PAGE, allPokemon)
+
+    $('body').on('click', '.numberedButtons', async function (event) {
+        let currentPage = Number(event.target.value)
+        paginate(currentPage, allPokemon)
+    })
+
+
 
 }
 
