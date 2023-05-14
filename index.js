@@ -231,7 +231,7 @@ const updateModal = (pokemonObject) => {
 const setup = async () => {
     let allPokemonResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810')
     let allPokemon = allPokemonResponse.data.results
-    const numPages = Math.ceil(allPokemon.length / PAGE_SIZE)
+    let numPages = Math.ceil(allPokemon.length / PAGE_SIZE)
 
     let allFiltersResponse = await axios.get('https://pokeapi.co/api/v2/type/')
     let allFilters = allFiltersResponse.data.results
@@ -260,6 +260,7 @@ const setup = async () => {
         }
 
         allPokemon = await displayFilteredPokemon(selectedFilters, allPokemon, numPages)
+        numPages = Math.ceil(allPokemon.length / PAGE_SIZE)
     });
 
     // Event listener on pokemon card
