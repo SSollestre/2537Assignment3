@@ -72,7 +72,6 @@ const paginate = async (currentPage, allPokemon) => {
         let pokemonName = pokemon.name
         let pokemonHeader = pokemonName.toUpperCase()
         let pokemonImage = pokemon.sprites.front_default
-        console.log(pokemon)
         $('#pokeCardContainer').append(`
             <div class="pokeCard card" pokeName=${pokemonName}>
             <h3>${pokemonHeader}</h3>
