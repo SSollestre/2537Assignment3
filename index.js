@@ -144,6 +144,7 @@ const displayFilteredPokemon = async (filters, allPokemon) => {
     } else {
         filteredPokemon = await getPokemonFiltered(filters)
     }
+    console.log(filteredPokemon)
     paginate(INITIAL_PAGE, filteredPokemon)
     return filteredPokemon
 }
@@ -258,6 +259,10 @@ const setup = async () => {
             })
         }
 
+        console.log(selectedFilters)
+        if (selectedFilters.length === 0) {
+            allPokemon = allPokemonResponse.data.results
+        }
         allPokemon = await displayFilteredPokemon(selectedFilters, allPokemon)
         numPages = Math.ceil(allPokemon.length / PAGE_SIZE)
         currentPage = INITIAL_PAGE;
