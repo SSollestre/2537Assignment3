@@ -124,7 +124,7 @@ const getPokemonFiltered = async (filters) => {
     let multiFilter = initialSetComplete
 
     for (let i = 1; i < filters.length; i++) {
-        multiFilter = initialSetComplete.filter((pokemon) => {
+        multiFilter = multiFilter.filter((pokemon) => {
             return pokemon.type.includes(filters[i])
         })
     }
@@ -144,7 +144,6 @@ const displayFilteredPokemon = async (filters, allPokemon) => {
     } else {
         filteredPokemon = await getPokemonFiltered(filters)
     }
-    console.log(filteredPokemon)
     paginate(INITIAL_PAGE, filteredPokemon)
     return filteredPokemon
 }
