@@ -140,13 +140,13 @@ const getPokemonFiltered = async (filters) => {
 const displayFilteredPokemon = async (filters, allPokemon, numPages) => {
     let filteredPokemon;
     if (filters.length === 0) {
-        paginate(INITIAL_PAGE, allPokemon)
-        updatePaginationButtons(INITIAL_PAGE, numPages)
+        filteredPokemon = allPokemon
     } else {
         filteredPokemon = await getPokemonFiltered(filters)
-        paginate(INITIAL_PAGE, filteredPokemon)
-        updatePaginationButtons(INITIAL_PAGE, numPages)
     }
+    paginate(INITIAL_PAGE, filteredPokemon)
+    updatePaginationButtons(INITIAL_PAGE, numPages)
+    return filteredPokemon
 }
 
 
@@ -249,7 +249,7 @@ const setup = async () => {
     })
 
     // Event listener on filter
-    $('body').on('change', '.typeFilter', function (event) {
+    $('body').on('change', '.typeFilter', async function (event) {
         let filter = event.target.value
         if ($(this).is(':checked')) {
             selectedFilters.push(filter)
@@ -259,7 +259,7 @@ const setup = async () => {
             })
         }
 
-        displayFilteredPokemon(selectedFilters, allPokemon, numPages)
+        allPokemon = await displayFilteredPokemon(selectedFilters, allPokemon, numPages)
     });
 
     // Event listener on pokemon card
