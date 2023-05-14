@@ -2,6 +2,35 @@ const PAGE_SIZE = 10
 const INITIAL_PAGE = 1
 
 
+const updatePaginationButtons = (currentPage, numPages) => {
+    $('#paginationContainer').empty()
+
+    if (currentPage != INITIAL_PAGE) {
+        $('#paginationContainer').append(`
+     <button id="prev" class="btn btn-primary numberedButtons" value="${currentPage - 1}">Prev</button>
+    `);
+    }
+
+
+    for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+
+        if (i > 0 && i <= numPages) {
+            console.log(i)
+            $('#paginationContainer').append(`
+            <button class="btn btn-primary page ms-1 numberedButtons active" value="${i}">${i}</button>
+            `);
+        }
+    }
+
+    if (currentPage != numPages) {
+        $('#paginationContainer').append(`
+     <button id="prev" class="btn btn-primary numberedButtons" value="${currentPage + 1}">Next</button>
+    `);
+    }
+
+}
+
+
 const paginate = async (currentPage, allPokemon) => {
     let pagePokemon = allPokemon.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
@@ -28,15 +57,16 @@ const paginate = async (currentPage, allPokemon) => {
 const setup = async () => {
     let allPokemonResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810')
     let allPokemon = allPokemonResponse.data.results
+    const numPages = Math.ceil(allPokemon.length / PAGE_SIZE)
 
     paginate(INITIAL_PAGE, allPokemon)
+    updatePaginationButtons(INITIAL_PAGE, numPages)
 
     $('body').on('click', '.numberedButtons', async function (event) {
         let currentPage = Number(event.target.value)
         paginate(currentPage, allPokemon)
+        updatePaginationButtons(currentPage, numPages)
     })
-
-
 
 }
 
