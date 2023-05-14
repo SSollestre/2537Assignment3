@@ -173,9 +173,9 @@ const displayFilteredPokemon = async (filters, allPokemon, numPages) => {
 
 
 const updateModal = (pokemonObject) => {
-    const name = pokemonObject.species.name
+    const name = pokemonObject.species.name.toUpperCase()
     const id = pokemonObject.id
-    const imageSrc = pokemonObject.sprites.other.official - artwork.front_default
+    const imageSrc = pokemonObject.sprites.other['official-artwork'].front_default
     let abilities = pokemonObject.abilities
     let stats = pokemonObject.stats
     let types = pokemonObject.types
@@ -200,6 +200,58 @@ const updateModal = (pokemonObject) => {
     // console.log(abilities)
     // console.log(stats)
     // console.log(types)
+
+    $('#pokeModal').html(`
+    <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <div class="modal-title">
+                        <h2>${name}</h2>
+                        <h5>${id}</h5>
+                    </div>
+
+                    <button type="button" class="close btn btn-light px-2 py-0 pb-1 ms-auto" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true" class="fw-bold text-secondary">x</span>
+                    </button>
+                    <br>
+
+                </div>
+
+                <div class="modal-body">
+                    <div style="width:200px">
+                        <img class="modalImg"
+                            src="${imageSrc}"
+                            alt="${name.toLowerCase()}">
+                        <div>
+                            <h3>Abilities</h3>
+                            <ul>
+                            ${abilities.map(ability => `<li>${ability}</li>`).join('')}
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3>Stats</h3>
+                            <ul>
+                            ${stats.map(stat => `<li>${stat.name}: ${stat.value}</li>`).join('')}
+                            </ul>
+
+                        </div>
+
+                    </div>
+                    <h3>Types</h3>
+                    <ul>
+                    ${types.map(type => `<li>${type}</li>`).join('')}
+                    </ul>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    `);
 
 }
 
