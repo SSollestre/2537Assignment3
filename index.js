@@ -35,10 +35,21 @@ const updatePaginationButtons = (currentPage, numPages) => {
 }
 
 
+const updateHeader = (currentAmount, maxAmount, totalPokemon) => {
+    $('#pokeCardsHeader').html(`
+     <h3>Showing (${currentAmount} to ${maxAmount}) of ${totalPokemon} pokemon</h3>
+    `);
+}
+
+
 const paginate = async (currentPage, allPokemon) => {
     let pagePokemon = allPokemon.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+    let totalPokemonOnPage = pagePokemon.length
+    let firstPokemonCount = (currentPage - 1) * PAGE_SIZE + 1
 
     $('#pokeCardContainer').empty();
+
+    updateHeader(firstPokemonCount, totalPokemonOnPage + firstPokemonCount, allPokemon.length)
 
     pagePokemon.forEach(async (pokemonObject) => {
         let pokemonResponse = await axios.get(pokemonObject.url)
