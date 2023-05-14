@@ -5,6 +5,8 @@ const INITIAL_PAGE = 1
 const paginate = async (currentPage, allPokemon) => {
     let pagePokemon = allPokemon.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
+    $('#pokeCardContainer').empty();
+
     pagePokemon.forEach(async (pokemonObject) => {
         let pokemonResponse = await axios.get(pokemonObject.url)
         let pokemon = pokemonResponse.data
