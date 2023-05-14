@@ -265,7 +265,7 @@ const setup = async () => {
     });
 
     // Event listener on pokemon card
-    $('body').on('click', '.pokeCard', async function (event) {
+    $('body').on('click', '.pokeCard', async function () {
         const pokemonName = $(this).attr('pokeName')
         const pokemonResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
         const pokemonObject = pokemonResponse.data
