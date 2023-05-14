@@ -13,12 +13,16 @@ const updatePaginationButtons = (currentPage, numPages) => {
 
 
     for (let i = currentPage - 2; i <= currentPage + 2; i++) {
-
         if (i > 0 && i <= numPages) {
-            console.log(i)
-            $('#paginationContainer').append(`
+            if (i == currentPage) {
+                $('#paginationContainer').append(`
             <button class="btn btn-primary page ms-1 numberedButtons active" value="${i}">${i}</button>
             `);
+            } else {
+                $('#paginationContainer').append(`
+            <button class="btn btn-primary page ms-1 numberedButtons" value="${i}">${i}</button>
+            `);
+            }
         }
     }
 
